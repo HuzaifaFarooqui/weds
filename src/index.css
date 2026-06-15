@@ -1,0 +1,157 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800;900&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-royal-navy: #0e1b2f;
+  --color-royal-dark: #07101f;
+  --color-royal-black: #040913;
+  
+  --color-luxury-gold: #D4AF37;
+  --color-luxury-goldLight: #F7E7A9;
+  --color-luxury-goldDark: #AA7C11;
+  --color-luxury-ivory: #FFFDF6;
+  --color-luxury-ivoryDark: #E6DEC9;
+
+  --font-cursive: 'Great Vibes', cursive;
+  --font-serif: 'Playfair Display', serif;
+  --font-display: 'Cinzel', serif;
+
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s infinite linear;
+  --animate-fade-in-up: fadeInUp 1s ease-out forwards;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+}
+
+body {
+  background-color: #040913;
+  color: #FFFDF6;
+  font-family: 'Playfair Display', serif;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  border: none;
+  min-height: 100vh;
+}
+
+/* Custom Premium Utility classes */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #FFF6D3 0%, #D4AF37 40%, #F1D479 60%, #B88E1B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gold-gradient-soft {
+  background: linear-gradient(135deg, #F7E7A9 0%, #D4AF37 50%, #B88E1B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-gold-gradient {
+  background: linear-gradient(135deg, #FFF6D3 0%, #D4AF37 40%, #F1D479 60%, #B88E1B 100%);
+}
+
+.bg-gold-gradient-soft {
+  background: linear-gradient(135deg, #F7E7A9 0%, #D4AF37 100%);
+}
+
+.border-gold-gradient {
+  border-image: linear-gradient(135deg, #FFF6D3 0%, #D4AF37 50%, #B88E1B 100%) 1;
+}
+
+.text-shadow-gold {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.4), 0 0 2px rgba(212, 175, 55, 0.8);
+}
+
+.text-shadow-navy {
+  text-shadow: 0 0 8px rgba(14, 27, 47, 0.6);
+}
+
+.shadow-gold-glow {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.25), inset 0 0 15px rgba(212, 175, 55, 0.1);
+}
+
+.shadow-door-inner {
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9), 0 0 30px rgba(212, 175, 55, 0.3);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* Custom patterns and luxury border frame */
+.pattern-overlay {
+  background-image: radial-gradient(circle at 1px 1px, rgba(212, 175, 55, 0.05) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+.luxury-border-frame {
+  position: relative;
+}
+
+.luxury-border-frame::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.luxury-border-frame::after {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: 13px;
+  right: 13px;
+  bottom: 13px;
+  border: 2.5px double rgba(212, 175, 55, 0.65);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Custom scratch card canvas hover cursor */
+.scratch-canvas {
+  touch-action: none;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='m4.93 4.93 14.14 14.14'/%3E%3C/svg%3E") 12 12, pointer;
+}
