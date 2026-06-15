@@ -27,7 +27,7 @@ function App() {
       {/* Background audio player (HTML5 Audio tag) */}
       <audio
         ref={audioRef}
-        src="https://assets.mixkit.co/music/preview/mixkit-wedding-bells-2646.mp3"
+        src="/music.mp3"
         loop
         preload="auto"
       />
