@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react';
+import { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 
 export type MusicPlayerHandle = {
@@ -7,7 +7,6 @@ export type MusicPlayerHandle = {
 
 export const MusicPlayer = forwardRef<MusicPlayerHandle, {}>((_, ref) => {
   const playerRef = useRef<any>(null);
-  const [isReady, setIsReady] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -45,7 +44,6 @@ export const MusicPlayer = forwardRef<MusicPlayerHandle, {}>((_, ref) => {
         },
         events: {
           onReady: () => {
-            setIsReady(true);
             // Set initial volume to 75 (loud background level)
             playerRef.current.setVolume(75);
           },
