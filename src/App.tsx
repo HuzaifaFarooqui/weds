@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles } from './components/Sparkles';
 import { MusicPlayer } from './components/MusicPlayer';
+import type { MusicPlayerHandle } from './components/MusicPlayer';
 import { DoorOpening } from './components/DoorOpening';
 import { InvitationCard } from './components/InvitationCard';
 import { Venue } from './components/Venue';
@@ -10,30 +11,19 @@ import { Hosts } from './components/Hosts';
 
 function App() {
   const [doorsOpened, setDoorsOpened] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const musicPlayerRef = useRef<MusicPlayerHandle>(null);
 
   const handleOpenStart = () => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.65;
-      audioRef.current.play().catch(err => {
-        console.log("Audio failed to play synchronously:", err);
-      });
+    if (musicPlayerRef.current) {
+      musicPlayerRef.current.play();
     }
   };
 
   return (
     <div className="relative min-h-screen bg-royal-black text-luxury-ivory overflow-hidden selection:bg-luxury-gold selection:text-royal-black w-full">
       
-      {/* Background audio player (HTML5 Audio tag) */}
-      <audio
-        ref={audioRef}
-        src="/music.mp3"
-        loop
-        preload="auto"
-      />
-
-      {/* Floating mute controller */}
-      {doorsOpened && <MusicPlayer audioRef={audioRef} />}
+      {/* Background YouTube audio player with API integration */}
+      <MusicPlayer ref={musicPlayerRef} />
 
       <AnimatePresence mode="wait">
         {!doorsOpened ? (
