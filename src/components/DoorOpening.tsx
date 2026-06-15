@@ -4,14 +4,18 @@ import confetti from 'canvas-confetti';
 import { Mandala } from './Mandala';
 
 interface DoorOpeningProps {
+  onOpenStart?: () => void;
   onOpen: () => void;
 }
 
-export const DoorOpening: React.FC<DoorOpeningProps> = ({ onOpen }) => {
+export const DoorOpening: React.FC<DoorOpeningProps> = ({ onOpenStart, onOpen }) => {
   const [isOpened, setIsOpened] = useState(false);
 
   const handleOpenDoors = () => {
     if (isOpened) return;
+    if (onOpenStart) {
+      onOpenStart();
+    }
     setIsOpened(true);
     
     // Trigger golden confetti explosion

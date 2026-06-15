@@ -1,54 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { Volume2, VolumeX } from 'lucide-react';
 
 interface MusicPlayerProps {
-  playTriggered: boolean;
+  audioRef: React.RefObject<HTMLAudioElement | null>;
 }
 
-export const MusicPlayer: React.FC<MusicPlayerProps> = ({ playTriggered }) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [isIframeLoaded, setIsIframeLoaded] = useState(false);
+export const MusicPlayer: React.FC<MusicPlayerProps> = ({ audioRef }) => {
+  const [isMuted, setIsMuted] = useState(false);
 
-  // Send control commands to the YouTube iframe API
-  const sendPlayerCommand = (func: string, args: any[] = []) => {
-    const iframe = iframeRef.current;
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage(
-        JSON.stringify({
-          event: 'command',
-          func,
-          args
-        }),
-        '*'
-      );
+  const toggleMute = () => {
+    if (audioRef.current) {
+      if (isMuted) {
+        audioRef.current.muted = false;
+        setIsMuted(false);
+      } else {
+        audioRef.current.muted = true;
+        setIsMuted(true);
+      }
     }
-  };
-
-  // Auto-play when trigger flips and iframe is ready
-  useEffect(() => {
-    if (playTriggered && isIframeLoaded) {
-      // Small timeout to ensure YouTube player has initialized post-handshake
-      setTimeout(() => {
-        sendPlayerCommand('setVolume', [60]); // Medium background level
-        sendPlayerCommand('playVideo');
-      }, 500);
-    }
-  }, [playTriggered, isIframeLoaded]);
-
-  const handleIframeLoad = () => {
-    setIsIframeLoaded(true);
   };
 
   return (
-    <div className="hidden">
-      {/* Invisible YouTube Iframe with JS API enabled */}
-      <iframe
-        ref={iframeRef}
-        src="https://www.youtube.com/embed/lgm3puP3tMA?enablejsapi=1&controls=0&loop=1&playlist=lgm3puP3tMA&autoplay=0&mute=0"
-        className="w-0 h-0 opacity-0 pointer-events-none absolute"
-        allow="autoplay"
-        title="Wedding Background Music"
-        onLoad={handleIframeLoad}
-      />
-    </div>
+    <button
+      onClick={toggleMute}
+      className="fixed bottom-6 right-6 z-40 w-9 h-9 rounded-full bg-gold-gradient text-royal-black shadow-[0_4px_12px_rgba(0,0,0,0.4)] flex items-center justify-center cursor-pointer hover:scale-110 active:scale-95 transition-all duration-300 hover:shadow-gold-glow"
+      title={isMuted ? "Unmute Music" : "Mute Music"}
+    >
+      {isMuted ? (
+        <VolumeX className="w-4 h-4" />
+      ) : (
+        <Volume2 className="w-4 h-4 animate-[spin_8s_linear_infinite]" />
+      )}
+    </button>
   );
 };
