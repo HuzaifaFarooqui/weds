@@ -5,8 +5,13 @@ export type MusicPlayerHandle = {
   play: () => void;
 };
 
-export const MusicPlayer = forwardRef<MusicPlayerHandle, {}>((_, ref) => {
+interface MusicPlayerProps {
+  onReady?: () => void;
+}
+
+export const MusicPlayer = forwardRef<MusicPlayerHandle, MusicPlayerProps>(({ onReady }, ref) => {
   const playerRef = useRef<any>(null);
+  const playRequestedRef = useRef(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -28,8 +33,8 @@ export const MusicPlayer = forwardRef<MusicPlayerHandle, {}>((_, ref) => {
 
     function initPlayer() {
       playerRef.current = new (window as any).YT.Player('yt-player', {
-        height: '0',
-        width: '0',
+        height: '10',
+        width: '10',
         videoId: 'lgm3puP3tMA',
         playerVars: {
           autoplay: 0,
@@ -45,7 +50,16 @@ export const MusicPlayer = forwardRef<MusicPlayerHandle, {}>((_, ref) => {
         events: {
           onReady: () => {
             // Set initial volume to 75 (loud background level)
-            playerRef.current.setVolume(75);
+            if (playerRef.current && typeof playerRef.current.setVolume === 'function') {
+              playerRef.current.setVolume(75);
+            }
+            // If the user already tapped to open, play immediately
+            if (playRequestedRef.current && playerRef.current && typeof playerRef.current.playVideo === 'function') {
+              playerRef.current.playVideo();
+            }
+            if (onReady) {
+              onReady();
+            }
           },
           onStateChange: (event: any) => {
             // YT.PlayerState.PLAYING is 1
@@ -58,10 +72,11 @@ export const MusicPlayer = forwardRef<MusicPlayerHandle, {}>((_, ref) => {
         }
       });
     }
-  }, []);
+  }, [onReady]);
 
   useImperativeHandle(ref, () => ({
     play: () => {
+      playRequestedRef.current = true;
       if (playerRef.current && typeof playerRef.current.playVideo === 'function') {
         playerRef.current.playVideo();
       }
@@ -82,8 +97,11 @@ export const MusicPlayer = forwardRef<MusicPlayerHandle, {}>((_, ref) => {
 
   return (
     <>
-      {/* Hidden container where YouTube API will construct the player */}
-      <div id="yt-player" className="hidden absolute w-0 h-0 opacity-0 pointer-events-none" />
+      {/* Off-screen active container to prevent mobile browsers from suspending/blocking rendering */}
+      <div 
+        id="yt-player" 
+        className="absolute top-[-999px] left-[-999px] w-[10px] h-[10px] opacity-0 pointer-events-none z-0" 
+      />
       
       {/* Floating mute controller - displayed only after music begins playing */}
       {isPlaying && (
